@@ -1,0 +1,65 @@
+<launch>
+    <!-- rosbag arguments -->
+    <arg name="bag_start"   default="0" />
+    <arg name="duration"    default="10000" />
+    <arg name="bag_rate"    default="1" />
+    <arg name="do_bag"      default="false" />
+    <arg name="bag"         default="" />
+    <arg name="do_lc"       default="true" />
+
+    <!-- rosservice arguments -->
+    <arg name="do_save_traj"        default="false" />
+    <arg name="do_save_resource"    default="false" />
+    <arg name="traj_file_name"      default="" />
+    <arg name="resource_file_name"  default="" />
+    <arg name="timing_file_name"    default="Timing.txt" />
+
+    <arg name="show_rviz"       default="true" />
+    <arg name="settings_file"   default="$(find orb_slam3_ros)/config/Stereo-Inertial/rover_stereo-inertial_t265_external.yaml"/>
+
+    <!-- play the dataset -->
+    <group if="$(arg do_bag)">
+        <node pkg="rosbag" type="play" name="rosbag" args="-d 1 -r $(arg bag_rate) -s $(arg bag_start) -u $(arg duration) $(arg bag)" required="true"/>
+    </group>
+
+    <node name="orb_slam3" pkg="orb_slam3_ros" type="ros_stereo_inertial" output="screen">
+        <!-- for Rosario dataset -->
+        <remap from="/camera/left/image_raw"    to="/t265/image_left"/>
+        <remap from="/camera/right/image_raw"   to="/t265/image_right"/>
+        <remap from="/imu"                      to="/vn100/imu_interp"/>
+
+        <!-- Parameters for original ORB-SLAM3 -->
+        <param name="voc_file"      type="string"   value="$(find orb_slam3_ros)/orb_slam3/Vocabulary/ORBvoc.txt.bin"/>
+        <param name="settings_file" type="string"   value="$(arg settings_file)"/>
+
+        <!-- Parameters for ROS -->
+        <param name="world_frame_id"    type="string"   value="world" />
+        <param name="cam_frame_id"      type="string"   value="camera" />
+        <param name="imu_frame_id"      type="string"   value="imu" />
+        <param name="enable_pangolin"   type="bool"     value="$(arg show_rviz)" />
+
+        <!-- Parameters to save trajectory and map -->
+        <param name="save_traj"         type="bool"     value="$(arg do_save_traj)" />
+        <param name="traj_file_name"    type="string"   value="$(arg traj_file_name)" />
+        <param name="do_loop_closing"   type="bool"     value="$(arg do_lc)" />
+        <param name="save_map"          type="bool"     value="false" />
+        <param name="map_file_name"     type="string"   value="" />
+        <param name="timing_file_name"  type="string"   value="$(arg timing_file_name)" />
+    </node>
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="static_tf_pub" args="0 0 0 0 0 0 1 /world /camera" />
+
+    <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="trajectory_server_orb_slam3" output="screen" ns="orb_slam3_ros" >
+        <param name="/target_frame_name"        value="/world" />
+        <param name="/source_frame_name"        value="/camera" />
+        <param name="/trajectory_update_rate"   value="20.0" />
+        <param name="/trajectory_publish_rate"  value="20.0" />
+    </node>
+
+    <group if="$(arg do_save_resource)">
+        <include file="$(find cpu_monitor)/launch/cpu_monitor.launch">
+            <arg name="csv_file" value="$(arg resource_file_name)"/>
+        </include>
+    </group>
+    
+</launch>
