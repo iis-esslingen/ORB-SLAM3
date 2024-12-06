@@ -183,7 +183,7 @@ roslaunch orb_slam3_ros <launch_file> \
 Parameter
 - `launch_file`: specifies launch file following the format `rover_<mode>_<cam>.launch`
     - `mode` ∈ ["mono", "mono_inertial", "rgbd", "rgbd_inertial", "stereo", "stereo_inertial"]: specifies sensors to use.
-    - `cam` ∈ ["d435i", "d455", "t265"]: specifies camera.
+    - `cam` ∈ ["d435i", "t265", "pi_cam_02"]: specifies camera.
     - `do_bag` ∈ ["true", "false"], OPTIONAL: specifies to replay a bag.
     - `bag`, OPTIONAL: specifies path to rosbag.
     - `bag_start`, OPTIONAL: specifies where to start rosbag from [s]
