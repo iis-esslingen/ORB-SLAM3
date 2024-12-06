@@ -181,16 +181,15 @@ roslaunch orb_slam3_ros <launch_file> \
 ```
 
 Parameter
-- `launch_file`: specifies launch file following the format `<dataset>_<mode>_<cam>.launch`
-    - `dataset` $\in$ ["stihl"]: specifies dataset.
-    - `mode`$\in$ ["mono", "mono_inertial", "rgbd", "rgbd_inertial", "stereo", "stereo_inertial"]: specifies sensors to use.
-    - `cam` $\in$ ["d435i", "d455", "t265"]: specifies camera.
-    - `do_bag` $\in$ ["true", "false"], OPTIONAL: specifies to replay a bag.
+- `launch_file`: specifies launch file following the format `rover_<mode>_<cam>.launch`
+    - `mode` ∈ ["mono", "mono_inertial", "rgbd", "rgbd_inertial", "stereo", "stereo_inertial"]: specifies sensors to use.
+    - `cam` ∈ ["d435i", "d455", "t265"]: specifies camera.
+    - `do_bag` ∈ ["true", "false"], OPTIONAL: specifies to replay a bag.
     - `bag`, OPTIONAL: specifies path to rosbag.
     - `bag_start`, OPTIONAL: specifies where to start rosbag from [s]
     - `bag_rate`, OPTIONAL: specifies rate [hz] to replay rosbag.
-    - `do_save_traj` $\in$ ["true", "false"], OPTIONAL: specifies to save a predicted trajectory.
+    - `do_save_traj` ∈ ["true", "false"], OPTIONAL: specifies to save a predicted trajectory.
     - `traj_file_name`, OPTIONAL: specifies file name of trajectory.
-    - `do_save_map` $\in$ ["true", "false"], OPTIONAL: specifies to save a generated map.
+    - `do_save_map` ∈ ["true", "false"], OPTIONAL: specifies to save a generated map.
     - `map_file_name`, OPTIONAL: specifies file name of map.
 
