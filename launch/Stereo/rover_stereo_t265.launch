@@ -9,9 +9,7 @@
 
     <!-- rosservice arguments -->
     <arg name="do_save_traj"        default="false" />
-    <arg name="do_save_resource"    default="false" />
     <arg name="traj_file_name"      default="" />
-    <arg name="resource_file_name"  default="" />
     <arg name="timing_file_name"    default="Timing.txt" />
 
     <arg name="show_rviz"       default="true" />
@@ -51,11 +49,5 @@
         <param name="/trajectory_update_rate"   value="20.0" />
         <param name="/trajectory_publish_rate"  value="20.0" />
     </node>
-
-    <group if="$(arg do_save_resource)">
-        <include file="$(find cpu_monitor)/launch/cpu_monitor.launch">
-            <arg name="csv_file" value="$(arg resource_file_name)"/>
-        </include>
-    </group>
     
 </launch>
